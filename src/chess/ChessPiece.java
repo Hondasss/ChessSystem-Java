@@ -3,7 +3,7 @@ package chess;
 import boardgame.Board;
 import boardgame.Piece;
 
-public class ChessPiece extends Piece{
+public abstract class ChessPiece extends Piece{
 	
 	// Subclasse ChessPiece adiciona a cor da peça e herda o board e o position, previamente declarado como nulo.
 	private Color color;
