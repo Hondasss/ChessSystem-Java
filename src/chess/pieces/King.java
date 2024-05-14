@@ -6,6 +6,7 @@ import chess.Color;
 
 public class King extends ChessPiece {
 
+	// Construtor da peça REI que herda da ChessPiece.
 	public King(Board board, Color color) {
 		super(board, color);
 	}

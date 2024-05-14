@@ -6,6 +6,7 @@ import chess.Color;
 
 public class Rook extends ChessPiece{
 
+	// Construtor da peça TORRE que herda da ChessPiece.
 	public Rook(Board board, Color color) {
 		super(board, color);
 	}

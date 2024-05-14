@@ -1,10 +1,15 @@
 package application;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import chess.ChessPiece;
+import chess.ChessPosition;
 import chess.Color;
 
 public class UI {
 
+	// Adiciona os códigos ANSI para cores.
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
@@ -15,6 +20,7 @@ public class UI {
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
 
+	// Cores do BACKGROUND
 	public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
 	public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
 	public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
@@ -23,6 +29,25 @@ public class UI {
 	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+	// Método que limpa a tela do usuário
+	public static void clearScreen() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+	}
+
+	// Método que lê a posição da peça (A1, B4, C3...)
+	public static ChessPosition readChessPosition(Scanner entrada) {
+		try {
+			String s = entrada.nextLine();
+			char column = s.charAt(0); // Captura a coluna
+			int row = Integer.parseInt(s.substring(1)); // Captura a linha
+
+			return new ChessPosition(column, row); // Nova chess position.
+		} catch (RuntimeException e) {
+			throw new InputMismatchException("Error reading ChessPosition. Valid values are from a1 to h8."); // Tratamento do erro de entrada
+		}
+	}
 
 	public static void printBoard(ChessPiece[][] pieces) {
 		for (int i = 0; i < pieces.length; i++) {
@@ -35,14 +60,16 @@ public class UI {
 		System.out.println("  a b c d e f g h");
 	}
 
+	// Método que imprime a peça.
 	private static void printPiece(ChessPiece piece) {
 		if (piece == null) {
-			System.out.print("-");
+			System.out.print("-"); // Se não houver peça, imprimir o "-"
 		} else {
 			if (piece.getColor() == Color.WHITE) {
-				System.out.print(ANSI_WHITE + piece + ANSI_RESET);
+				System.out.print(ANSI_WHITE + piece + ANSI_RESET); // Atribui a cor branca.
 			} else {
-				System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
+				System.out.print(ANSI_YELLOW + piece + ANSI_RESET); // Atribui a cor preta (No caso, amarelo por conta
+																	// do fundo ser preto).
 			}
 		}
 		System.out.print(" ");
