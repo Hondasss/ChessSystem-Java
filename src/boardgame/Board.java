@@ -76,7 +76,7 @@ public class Board {
 
 	// Método que verifica se a posição existe pela coordenada.
 	private boolean positionExists(int row, int column) {
-		return row >= 0 && row <= rows && column >= 0 && column <= columns; // Teste para ver se a posição existe
+		return row >= 0 && row < rows && column >= 0 && column < columns; // Teste para ver se a posição existe
 	}
 
 	// Método que verifica se na posição informada há alguma peça.

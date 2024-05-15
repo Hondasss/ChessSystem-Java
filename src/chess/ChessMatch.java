@@ -65,6 +65,13 @@ public class ChessMatch {
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
 	}
+	
+	public boolean[][] possibleMoves(ChessPosition sourcePosition){
+		Position position = sourcePosition.toPosition();
+		validateSourcePosition(position);
+		
+		return board.piece(position).possibleMoves();
+	}
 
 	// Método que cria o setup inicial, isto é, o layout que o jogo deve começar.
 	private void initialSetup() {
@@ -80,7 +87,7 @@ public class ChessMatch {
 		placeNewPiece('c', 7, new Rook(board, Color.BLACK));
 		placeNewPiece('c', 8, new Rook(board, Color.BLACK));
 		placeNewPiece('d', 7, new Rook(board, Color.BLACK));
-		placeNewPiece('e', 7, new Rook(board, Color.BLACK));
+		placeNewPiece('g', 7, new Rook(board, Color.BLACK));
 		placeNewPiece('d', 8, new King(board, Color.BLACK));
 	}
 }
