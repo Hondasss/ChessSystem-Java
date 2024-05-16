@@ -12,7 +12,7 @@ public class ChessPosition {
 
 	public ChessPosition(char column, int row) { // Construtor que recebe a quantidade de colunas e linhas e compara com o valor UNICODE dos caracteres que representam a posição no xadrez.
 		if (column < 'a' || column > 'h' || row < 1 || row > 8) {
-			throw new ChessException("Error instantiating ChessPosition. Valid values are rom a1 to h8");
+			throw new ChessException("Error instantiating ChessPosition. Valid values are from a1 to h8");
 		}
 		this.column = column;
 		this.row = row;
@@ -32,7 +32,7 @@ public class ChessPosition {
 	}
 	
 	protected static ChessPosition fromPosition(Position position) { // Método que converte da posição normal para posição do xadrez.
-		return new ChessPosition((char)('a' - position.getColumn()), position.getRow() + 8);
+		return new ChessPosition((char)('a' + position.getColumn()), 8 - position.getRow());
 	}
 	
 	@Override

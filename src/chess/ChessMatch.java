@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -14,6 +15,8 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlayer;
 	private Board board;
+	private boolean check;
+	
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
 
@@ -31,6 +34,10 @@ public class ChessMatch {
 	
 	public Color getCurrentPlayer() {
 		return currentPlayer;
+	}
+	
+	public boolean getCheck() {
+		return check;
 	}
 
 	// Aqui é criado a matriz de peças do xadrez, "mat" do tipo matriz de ChessPiece é instanciado com as dimensões do tabuleiro e é feito o upcasting da peça para ChessPiece
@@ -52,6 +59,14 @@ public class ChessMatch {
 		validateSourcePosition(source); // Verifica se a posição possui alguma peça.
 		validateTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target); // Variável "capturedPiece" recebe o método makeMove
+		
+		if (testCheck(currentPlayer)) {
+			undoMove(source, target, capturedPiece);
+			throw new ChessException("You can't put yourself in check");
+		}
+		
+		check = (testCheck(opponent(currentPlayer))) ? true : false;
+		
 		nextTurn();
 		return (ChessPiece)capturedPiece; // Retorna a peça caputarada
 	}
@@ -67,6 +82,17 @@ public class ChessMatch {
 			capturedPieces.add(capturedPiece);
 		}
 		return capturedPiece; // Devolve a peça capturada
+	}
+	
+	private void undoMove(Position source, Position target, Piece capturedPiece) {
+		Piece p = board.removePiece(target);
+		board.placePiece(p, source);
+		
+		if (capturedPiece != null) {
+			board.placePiece(capturedPiece, target);
+			capturedPieces.remove(capturedPiece);
+			piecesOnTheBoard.add(capturedPiece);
+		}
 	}
 	
 	// Verifica se há alguma peça na posição de origem.
@@ -104,7 +130,35 @@ public class ChessMatch {
 		
 		return board.piece(position).possibleMoves();
 	}
+	
+	private Color opponent(Color color) {
+		return (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+	}
 
+	private ChessPiece king(Color color) {
+		List<Piece> list = piecesOnTheBoard.stream().filter(x -> ((ChessPiece)x).getColor() == color).collect(Collectors.toList());
+		
+		for (Piece p : list) {
+			if (p instanceof King) {
+				return (ChessPiece)p;
+			}
+		}
+		throw new IllegalStateException("There is no " + color + " king on the board");
+	}
+	
+	private boolean testCheck(Color color) {
+		Position kingPosition = king(color).getChessPosition().toPosition();
+		List<Piece> opponentPieces = piecesOnTheBoard.stream().filter(x -> ((ChessPiece)x).getColor() == opponent(color)).collect(Collectors.toList());
+		
+		for (Piece p : opponentPieces) {
+			boolean[][] mat = p.possibleMoves();
+			if (mat[kingPosition.getRow()][kingPosition.getColumn()]) {
+				return true;
+			} 	
+		}
+		return false;
+	}
+	
 	// Método que cria o setup inicial, isto é, o layout que o jogo deve começar.
 	private void initialSetup() {
 		// placeNewPiece instancia a linha, a coluna e a peça no tabuleiro.
