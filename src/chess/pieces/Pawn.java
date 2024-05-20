@@ -7,7 +7,7 @@ import chess.Color;
 
 public class Pawn extends ChessPiece {
 
-	// Construtor da peça TORRE que herda da ChessPiece.
+	// Construtor da peça PEÃO que herda da ChessPiece.
 	public Pawn(Board board, Color color) {
 		super(board, color);
 	}
