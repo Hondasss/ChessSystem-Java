@@ -8,14 +8,14 @@ import chess.Color;
 public class Knight extends ChessPiece {
 	
 
-	// Construtor da peça TORRE que herda da ChessPiece.
+	// Construtor da peça Cavalo que herda da ChessPiece.
 	public Knight(Board board, Color color) {
 		super(board, color);
 	}
 
 	@Override
 	public String toString() {
-		return "K";
+		return "N";
 	}
 
 	private boolean canMove(Position position) {
@@ -60,8 +60,9 @@ public class Knight extends ChessPiece {
 		p.setValues(position.getRow() + 2, position.getColumn() + 1);
 		if (getBoard().positionExists(p) && canMove(p)) {
 			mat[p.getRow()][p.getColumn()] = true;
-		}
+		}	
+		
 		return mat;
-	}	
+	}
 
 }
